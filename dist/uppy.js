@@ -13333,6 +13333,7 @@ var FileInput = require('./plugins/FileInput.js');
 var GoogleDrive = require('./plugins/GoogleDrive/index.js');
 var Dropbox = require('./plugins/Dropbox/index.js');
 var Webcam = require('./plugins/Webcam/index.js');
+var Ftp = require('./plugins/Ftp/index.js');
 
 // Progressindicators
 var ProgressBar = require('./plugins/ProgressBar.js');
@@ -13361,10 +13362,11 @@ module.exports = {
   Transloadit: Transloadit,
   Dashboard: Dashboard,
   MetaData: MetaData,
-  Webcam: Webcam
+  Webcam: Webcam,
+  Ftp: Ftp
 };
 
-},{"./core/index.js":79,"./plugins/Dashboard/index.js":102,"./plugins/DragDrop/index.js":103,"./plugins/Dropbox/index.js":105,"./plugins/Dummy":106,"./plugins/FileInput.js":107,"./plugins/GoogleDrive/index.js":108,"./plugins/Informer.js":109,"./plugins/MetaData.js":110,"./plugins/Multipart":111,"./plugins/Plugin":112,"./plugins/ProgressBar.js":113,"./plugins/Transloadit":116,"./plugins/Tus10":117,"./plugins/Webcam/index.js":126}],91:[function(require,module,exports){
+},{"./core/index.js":79,"./plugins/Dashboard/index.js":102,"./plugins/DragDrop/index.js":103,"./plugins/Dropbox/index.js":105,"./plugins/Dummy":106,"./plugins/FileInput.js":107,"./plugins/Ftp/index.js":109,"./plugins/GoogleDrive/index.js":110,"./plugins/Informer.js":111,"./plugins/MetaData.js":112,"./plugins/Multipart":113,"./plugins/Plugin":114,"./plugins/ProgressBar.js":115,"./plugins/Transloadit":118,"./plugins/Tus10":119,"./plugins/Webcam/index.js":128}],91:[function(require,module,exports){
 'use strict';
 
 var _appendChild = require('yo-yoify/lib/appendChild');
@@ -14447,7 +14449,7 @@ module.exports = function (_Plugin) {
   return DashboardUI;
 }(Plugin);
 
-},{"../../core/Translator":76,"../../core/Utils":78,"../Plugin":112,"./Dashboard":92,"./icons":101,"drag-drop":14,"prettier-bytes":47}],103:[function(require,module,exports){
+},{"../../core/Translator":76,"../../core/Utils":78,"../Plugin":114,"./Dashboard":92,"./icons":101,"drag-drop":14,"prettier-bytes":47}],103:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -14647,7 +14649,7 @@ module.exports = function (_Plugin) {
   return DragDrop;
 }(Plugin);
 
-},{"../../core/Translator":76,"../../core/Utils":78,"./../Plugin":112,"drag-drop":14,"yo-yoify/lib/appendChild":74}],104:[function(require,module,exports){
+},{"../../core/Translator":76,"../../core/Utils":78,"./../Plugin":114,"drag-drop":14,"yo-yoify/lib/appendChild":74}],104:[function(require,module,exports){
 'use strict';
 
 var _svgNamespace = 'http://www.w3.org/2000/svg',
@@ -14834,7 +14836,7 @@ module.exports = function (_Plugin) {
   return Dropbox;
 }(Plugin);
 
-},{"../../generic-provider-views/index":89,"../../uppy-base/src/plugins/Provider":127,"../Plugin":112,"./icons":104,"yo-yoify/lib/appendChild":74}],106:[function(require,module,exports){
+},{"../../generic-provider-views/index":89,"../../uppy-base/src/plugins/Provider":130,"../Plugin":114,"./icons":104,"yo-yoify/lib/appendChild":74}],106:[function(require,module,exports){
 'use strict';
 
 var _onload = require('on-load'),
@@ -14926,7 +14928,7 @@ module.exports = function (_Plugin) {
 //   }
 // }
 
-},{"./Plugin":112,"on-load":43,"yo-yoify/lib/appendChild":74}],107:[function(require,module,exports){
+},{"./Plugin":114,"on-load":43,"yo-yoify/lib/appendChild":74}],107:[function(require,module,exports){
 'use strict';
 
 var _appendChild = require('yo-yoify/lib/appendChild');
@@ -15027,7 +15029,171 @@ module.exports = function (_Plugin) {
   return FileInput;
 }(Plugin);
 
-},{"../core/Translator":76,"../core/Utils":78,"./Plugin":112,"yo-yoify/lib/appendChild":74}],108:[function(require,module,exports){
+},{"../core/Translator":76,"../core/Utils":78,"./Plugin":114,"yo-yoify/lib/appendChild":74}],108:[function(require,module,exports){
+arguments[4][104][0].apply(exports,arguments)
+},{"dup":104,"yo-yoify/lib/appendChild":74}],109:[function(require,module,exports){
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _svgNamespace = 'http://www.w3.org/2000/svg',
+    _appendChild = require('yo-yoify/lib/appendChild');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Plugin = require('../Plugin');
+var FtpProvider = require('../../uppy-base/src/plugins/Ftp');
+
+var View = require('../../generic-provider-views/index');
+var icons = require('./icons');
+
+module.exports = function (_Plugin) {
+  _inherits(Ftp, _Plugin);
+
+  function Ftp(core, opts) {
+    _classCallCheck(this, Ftp);
+
+    var _this = _possibleConstructorReturn(this, _Plugin.call(this, core, opts));
+
+    _this.type = 'acquirer';
+    _this.id = 'Ftp';
+    _this.title = 'Ftp';
+    _this.stateId = 'Ftp';
+    _this.params = {};
+    _this.icon = function () {
+      var _path, _path2, _path3, _uppyIcon;
+
+      return _uppyIcon = document.createElementNS(_svgNamespace, 'svg'), _uppyIcon.setAttribute('width', '128'), _uppyIcon.setAttribute('height', '118'), _uppyIcon.setAttribute('viewBox', '0 0 128 118'), _uppyIcon.setAttribute('class', 'UppyIcon'), _appendChild(_uppyIcon, [' ', (_path = document.createElementNS(_svgNamespace, 'path'), _path.setAttribute('d', 'M38.145.777L1.108 24.96l25.608 20.507 37.344-23.06z'), _path), ' ', (_path2 = document.createElementNS(_svgNamespace, 'path'), _path2.setAttribute('d', 'M1.108 65.975l37.037 24.183L64.06 68.525l-37.343-23.06zM64.06 68.525l25.917 21.633 37.036-24.183-25.61-20.51z'), _path2), ' ', (_path3 = document.createElementNS(_svgNamespace, 'path'), _path3.setAttribute('d', 'M127.014 24.96L89.977.776 64.06 22.407l37.345 23.06zM64.136 73.18l-25.99 21.567-11.122-7.262v8.142l37.112 22.256 37.114-22.256v-8.142l-11.12 7.262z'), _path3), ' ']), _uppyIcon;
+    };
+
+    // writing out the key explicitly for readability the key used to store
+    // the provider instance must be equal to this.id.
+    _this.Ftp = new FtpProvider(_this.opts, _this.params);
+
+    _this.files = [];
+
+    // this.onAuth = this.onAuth.bind(this)
+    // Visual
+    _this.render = _this.render.bind(_this);
+
+    // set default options
+    var defaultOptions = {};
+
+    // merge default options with the ones set by user
+    _this.opts = _extends({}, defaultOptions, opts);
+    return _this;
+  }
+
+  Ftp.prototype.install = function install() {
+    this.view = new View(this);
+    // Set default state
+    this.core.setState({
+      // writing out the key explicitly for readability the key used to store
+      // the plugin state must be equal to this.stateId.
+      Ftp: {
+        authenticated: false,
+        files: [],
+        folders: [],
+        directories: [],
+        activeRow: -1,
+        filterInput: ''
+      }
+    });
+
+    // View overrides
+    // ==============
+    // These are needed as the generic provider methods written
+    // differ the ones needed for this plugin
+    this.view.handleAuth = this.handleAuth.bind(this);
+    this.view.getFolder = this.getFolder.bind(this);
+    this.view.logout = this.logout.bind(this);
+
+    var target = this.opts.target;
+    var plugin = this;
+    this.target = this.mount(target, plugin);
+    return;
+  };
+
+  Ftp.prototype.handleAuth = function handleAuth() {
+    this.view.updateState({ loading: true });
+    this.view.getFolder();
+  };
+
+  Ftp.prototype.uninstall = function uninstall() {
+    this.unmount();
+  };
+
+  Ftp.prototype.isFolder = function isFolder(item) {
+    return item.is_dir;
+  };
+
+  Ftp.prototype.getItemData = function getItemData(item) {
+    return _extends({}, item, { size: item.file_size });
+  };
+
+  Ftp.prototype.getItemIcon = function getItemIcon(item) {
+    return icons['page_white'];
+  };
+
+  Ftp.prototype.getItemSubList = function getItemSubList(item) {
+    return item.contents;
+  };
+
+  Ftp.prototype.getItemName = function getItemName(item) {
+    return item.file_name;
+  };
+
+  Ftp.prototype.getMimeType = function getMimeType(item) {
+    return item.mime_type;
+  };
+
+  Ftp.prototype.getItemId = function getItemId(item) {
+    return item.rev;
+  };
+
+  Ftp.prototype.getItemRequestPath = function getItemRequestPath(item) {
+    return encodeURIComponent(this.getItemName(item));
+  };
+
+  Ftp.prototype.getItemModifiedDate = function getItemModifiedDate(item) {
+    return item.modified;
+  };
+
+  Ftp.prototype.getFolder = function getFolder() {
+    var _this2 = this;
+
+    this.Ftp.list().then(function (resp) {
+      if (resp.Status === 'Error') {
+        _this2.view.updateState({
+          error: resp.Message
+        });
+        return;
+      }
+      // Success - display files
+      _this2.view.updateState({
+        files: resp.Data.Files,
+        authenticated: true,
+        loading: false
+      });
+    });
+  };
+
+  Ftp.prototype.logout = function logout() {
+    this.view.updateState({ authenticated: false });
+  };
+
+  Ftp.prototype.render = function render(state) {
+    return this.view.render(state);
+  };
+
+  return Ftp;
+}(Plugin);
+
+},{"../../generic-provider-views/index":89,"../../uppy-base/src/plugins/Ftp":129,"../Plugin":114,"./icons":108,"yo-yoify/lib/appendChild":74}],110:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -15168,7 +15334,7 @@ module.exports = function (_Plugin) {
   return Google;
 }(Plugin);
 
-},{"../../generic-provider-views/index":89,"../../uppy-base/src/plugins/Provider":127,"../Plugin":112,"yo-yoify/lib/appendChild":74}],109:[function(require,module,exports){
+},{"../../generic-provider-views/index":89,"../../uppy-base/src/plugins/Provider":130,"../Plugin":114,"yo-yoify/lib/appendChild":74}],111:[function(require,module,exports){
 'use strict';
 
 var _appendChild = require('yo-yoify/lib/appendChild');
@@ -15314,7 +15480,7 @@ module.exports = function (_Plugin) {
   return Informer;
 }(Plugin);
 
-},{"./Plugin":112,"yo-yoify/lib/appendChild":74}],110:[function(require,module,exports){
+},{"./Plugin":114,"yo-yoify/lib/appendChild":74}],112:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -15387,7 +15553,7 @@ module.exports = function (_Plugin) {
   return MetaData;
 }(Plugin);
 
-},{"./Plugin":112}],111:[function(require,module,exports){
+},{"./Plugin":114}],113:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -15567,7 +15733,7 @@ module.exports = function (_Plugin) {
   return Multipart;
 }(Plugin);
 
-},{"./Plugin":112,"es6-promise":28}],112:[function(require,module,exports){
+},{"./Plugin":114,"es6-promise":28}],114:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -15701,7 +15867,7 @@ module.exports = function () {
   return Plugin;
 }();
 
-},{"../core/Utils":78,"yo-yo":72}],113:[function(require,module,exports){
+},{"../core/Utils":78,"yo-yo":72}],115:[function(require,module,exports){
 'use strict';
 
 var _appendChild = require('yo-yoify/lib/appendChild');
@@ -15767,7 +15933,7 @@ module.exports = function (_Plugin) {
   return ProgressBar;
 }(Plugin);
 
-},{"./Plugin":112,"yo-yoify/lib/appendChild":74}],114:[function(require,module,exports){
+},{"./Plugin":114,"yo-yoify/lib/appendChild":74}],116:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -15841,7 +16007,7 @@ module.exports = function () {
   return Client;
 }();
 
-},{}],115:[function(require,module,exports){
+},{}],117:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -15915,7 +16081,7 @@ module.exports = function () {
   return TransloaditSocket;
 }();
 
-},{"namespace-emitter":42,"socket.io-client":52,"url-parse":69}],116:[function(require,module,exports){
+},{"namespace-emitter":42,"socket.io-client":52,"url-parse":69}],118:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -16199,7 +16365,7 @@ module.exports = function (_Plugin) {
   return Transloadit;
 }(Plugin);
 
-},{"../Plugin":112,"./Client":114,"./Socket":115,"es6-promise":28}],117:[function(require,module,exports){
+},{"../Plugin":114,"./Client":116,"./Socket":117,"es6-promise":28}],119:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -16616,7 +16782,7 @@ module.exports = function (_Plugin) {
   return Tus10;
 }(Plugin);
 
-},{"../core/UppySocket":77,"./Plugin":112,"es6-promise":28,"lodash.throttle":39,"tus-js-client":67,"whatwg-fetch":70}],118:[function(require,module,exports){
+},{"../core/UppySocket":77,"./Plugin":114,"es6-promise":28,"lodash.throttle":39,"tus-js-client":67,"whatwg-fetch":70}],120:[function(require,module,exports){
 'use strict';
 
 var _svgNamespace = 'http://www.w3.org/2000/svg',
@@ -16628,7 +16794,7 @@ module.exports = function (props) {
   return _uppyIcon = document.createElementNS(_svgNamespace, 'svg'), _uppyIcon.setAttribute('width', '100'), _uppyIcon.setAttribute('height', '77'), _uppyIcon.setAttribute('viewBox', '0 0 100 77'), _uppyIcon.setAttribute('class', 'UppyIcon'), _appendChild(_uppyIcon, [' ', (_path = document.createElementNS(_svgNamespace, 'path'), _path.setAttribute('d', 'M50 32c-7.168 0-13 5.832-13 13s5.832 13 13 13 13-5.832 13-13-5.832-13-13-13z'), _path), ' ', (_path2 = document.createElementNS(_svgNamespace, 'path'), _path2.setAttribute('d', 'M87 13H72c0-7.18-5.82-13-13-13H41c-7.18 0-13 5.82-13 13H13C5.82 13 0 18.82 0 26v38c0 7.18 5.82 13 13 13h74c7.18 0 13-5.82 13-13V26c0-7.18-5.82-13-13-13zM50 68c-12.683 0-23-10.318-23-23s10.317-23 23-23 23 10.318 23 23-10.317 23-23 23z'), _path2), ' ']), _uppyIcon;
 };
 
-},{"yo-yoify/lib/appendChild":74}],119:[function(require,module,exports){
+},{"yo-yoify/lib/appendChild":74}],121:[function(require,module,exports){
 'use strict';
 
 var _appendChild = require('yo-yoify/lib/appendChild'),
@@ -16668,7 +16834,7 @@ module.exports = function (props) {
   }, 4), _uppyWebcamContainer.setAttribute('class', 'UppyWebcam-container'), _appendChild(_uppyWebcamContainer, [' ', (_uppyWebcamVideoContainer = document.createElement('div'), _uppyWebcamVideoContainer.setAttribute('class', 'UppyWebcam-videoContainer'), _appendChild(_uppyWebcamVideoContainer, [' ', video, ' ']), _uppyWebcamVideoContainer), ' ', (_uppyWebcamButtonContainer = document.createElement('div'), _uppyWebcamButtonContainer.setAttribute('class', 'UppyWebcam-buttonContainer'), _appendChild(_uppyWebcamButtonContainer, [' ', shouldShowRecordButton ? RecordButton(props) : null, ' ', shouldShowSnapshotButton ? SnapshotButton(props) : null, ' ']), _uppyWebcamButtonContainer), ' ', (_uppyWebcamCanvas = document.createElement('canvas'), _uppyWebcamCanvas.setAttribute('style', 'display: none;'), _uppyWebcamCanvas.setAttribute('class', 'UppyWebcam-canvas'), _uppyWebcamCanvas), ' ']), _uppyWebcamContainer;
 };
 
-},{"./RecordButton":121,"./SnapshotButton":124,"on-load":43,"yo-yoify/lib/appendChild":74}],120:[function(require,module,exports){
+},{"./RecordButton":123,"./SnapshotButton":126,"on-load":43,"yo-yoify/lib/appendChild":74}],122:[function(require,module,exports){
 'use strict';
 
 var _appendChild = require('yo-yoify/lib/appendChild');
@@ -16679,7 +16845,7 @@ module.exports = function (props) {
   return _div = document.createElement('div'), _appendChild(_div, [' ', (_h = document.createElement('h1'), _h.textContent = 'Please allow access to your camera', _h), ' ', (_span = document.createElement('span'), _span.textContent = 'You have been prompted to allow camera access from this site. In order to take pictures with your camera you must approve this request.', _span), ' ']), _div;
 };
 
-},{"yo-yoify/lib/appendChild":74}],121:[function(require,module,exports){
+},{"yo-yoify/lib/appendChild":74}],123:[function(require,module,exports){
 'use strict';
 
 var _appendChild = require('yo-yoify/lib/appendChild');
@@ -16703,7 +16869,7 @@ module.exports = function RecordButton(_ref) {
   return _uppyButtonCircular2 = document.createElement('button'), _uppyButtonCircular2.setAttribute('type', 'button'), _uppyButtonCircular2.setAttribute('title', 'Begin Recording'), _uppyButtonCircular2.setAttribute('aria-label', 'Begin Recording'), _uppyButtonCircular2.onclick = onStartRecording, _uppyButtonCircular2.setAttribute('class', 'UppyButton--circular UppyButton--red UppyButton--sizeM UppyWebcam-recordButton'), _appendChild(_uppyButtonCircular2, [' ', RecordStartIcon(), ' ']), _uppyButtonCircular2;
 };
 
-},{"./RecordStartIcon":122,"./RecordStopIcon":123,"yo-yoify/lib/appendChild":74}],122:[function(require,module,exports){
+},{"./RecordStartIcon":124,"./RecordStopIcon":125,"yo-yoify/lib/appendChild":74}],124:[function(require,module,exports){
 'use strict';
 
 var _svgNamespace = 'http://www.w3.org/2000/svg',
@@ -16715,7 +16881,7 @@ module.exports = function (props) {
   return _uppyIcon = document.createElementNS(_svgNamespace, 'svg'), _uppyIcon.setAttribute('width', '100'), _uppyIcon.setAttribute('height', '100'), _uppyIcon.setAttribute('viewBox', '0 0 100 100'), _uppyIcon.setAttribute('class', 'UppyIcon'), _appendChild(_uppyIcon, [' ', (_circle = document.createElementNS(_svgNamespace, 'circle'), _circle.setAttribute('cx', '50'), _circle.setAttribute('cy', '50'), _circle.setAttribute('r', '40'), _circle), ' ']), _uppyIcon;
 };
 
-},{"yo-yoify/lib/appendChild":74}],123:[function(require,module,exports){
+},{"yo-yoify/lib/appendChild":74}],125:[function(require,module,exports){
 'use strict';
 
 var _svgNamespace = 'http://www.w3.org/2000/svg',
@@ -16727,7 +16893,7 @@ module.exports = function (props) {
   return _uppyIcon = document.createElementNS(_svgNamespace, 'svg'), _uppyIcon.setAttribute('width', '100'), _uppyIcon.setAttribute('height', '100'), _uppyIcon.setAttribute('viewBox', '0 0 100 100'), _uppyIcon.setAttribute('class', 'UppyIcon'), _appendChild(_uppyIcon, [' ', (_rect = document.createElementNS(_svgNamespace, 'rect'), _rect.setAttribute('x', '15'), _rect.setAttribute('y', '15'), _rect.setAttribute('width', '70'), _rect.setAttribute('height', '70'), _rect), ' ']), _uppyIcon;
 };
 
-},{"yo-yoify/lib/appendChild":74}],124:[function(require,module,exports){
+},{"yo-yoify/lib/appendChild":74}],126:[function(require,module,exports){
 'use strict';
 
 var _appendChild = require('yo-yoify/lib/appendChild');
@@ -16742,7 +16908,7 @@ module.exports = function SnapshotButton(_ref) {
   return _uppyButtonCircular = document.createElement('button'), _uppyButtonCircular.setAttribute('type', 'button'), _uppyButtonCircular.setAttribute('title', 'Take a snapshot'), _uppyButtonCircular.setAttribute('aria-label', 'Take a snapshot'), _uppyButtonCircular.onclick = onSnapshot, _uppyButtonCircular.setAttribute('class', 'UppyButton--circular UppyButton--red UppyButton--sizeM UppyWebcam-recordButton'), _appendChild(_uppyButtonCircular, [' ', CameraIcon(), ' ']), _uppyButtonCircular;
 };
 
-},{"./CameraIcon":118,"yo-yoify/lib/appendChild":74}],125:[function(require,module,exports){
+},{"./CameraIcon":120,"yo-yoify/lib/appendChild":74}],127:[function(require,module,exports){
 'use strict';
 
 var _svgNamespace = 'http://www.w3.org/2000/svg',
@@ -16754,7 +16920,7 @@ module.exports = function (props) {
   return _uppyIcon = document.createElementNS(_svgNamespace, 'svg'), _uppyIcon.setAttribute('width', '18'), _uppyIcon.setAttribute('height', '21'), _uppyIcon.setAttribute('viewBox', '0 0 18 21'), _uppyIcon.setAttribute('class', 'UppyIcon'), _appendChild(_uppyIcon, [' ', (_path = document.createElementNS(_svgNamespace, 'path'), _path.setAttribute('d', 'M14.8 16.9c1.9-1.7 3.2-4.1 3.2-6.9 0-5-4-9-9-9s-9 4-9 9c0 2.8 1.2 5.2 3.2 6.9C1.9 17.9.5 19.4 0 21h3c1-1.9 11-1.9 12 0h3c-.5-1.6-1.9-3.1-3.2-4.1zM9 4c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6 2.7-6 6-6z'), _path), ' ', (_path2 = document.createElementNS(_svgNamespace, 'path'), _path2.setAttribute('d', 'M9 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zM8 8c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1c0-.5.4-1 1-1z'), _path2), ' ']), _uppyIcon;
 };
 
-},{"yo-yoify/lib/appendChild":74}],126:[function(require,module,exports){
+},{"yo-yoify/lib/appendChild":74}],128:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -17016,7 +17182,61 @@ module.exports = function (_Plugin) {
   return Webcam;
 }(Plugin);
 
-},{"../../core/Utils":78,"../../uppy-base/src/plugins/Webcam":128,"../Plugin":112,"./CameraScreen":119,"./PermissionsScreen":120,"./WebcamIcon":125,"es6-promise":28}],127:[function(require,module,exports){
+},{"../../core/Utils":78,"../../uppy-base/src/plugins/Webcam":131,"../Plugin":114,"./CameraScreen":121,"./PermissionsScreen":122,"./WebcamIcon":127,"es6-promise":28}],129:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+require('whatwg-fetch');
+
+/**
+ * FTP Plugin
+ */
+module.exports = function () {
+  function Ftp() {
+    var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    _classCallCheck(this, Ftp);
+
+    this.params = Object.assign({}, params);
+
+    // merge default options with the ones set by user
+    this.opts = Object.assign({}, opts);
+  }
+
+  _createClass(Ftp, [{
+    key: 'init',
+    value: function init() {}
+
+    // Get files from FTP service
+
+  }, {
+    key: 'list',
+    value: function list() {
+      var headers = new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + this.opts.bearerToken
+      });
+
+      var request = new Request(this.opts.host + this.opts.getFilesUrl, {
+        method: 'get',
+        headers: headers
+      });
+
+      return fetch(request).then(function (res) {
+        return res.json();
+      });
+    }
+  }]);
+
+  return Ftp;
+}();
+
+},{"whatwg-fetch":70}],130:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -17091,7 +17311,7 @@ module.exports = function () {
   return Provider;
 }();
 
-},{"whatwg-fetch":70}],128:[function(require,module,exports){
+},{"whatwg-fetch":70}],131:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -17464,7 +17684,7 @@ module.exports = function () {
   return Webcam;
 }();
 
-},{"../utils/dataURItoFile":129}],129:[function(require,module,exports){
+},{"../utils/dataURItoFile":132}],132:[function(require,module,exports){
 'use strict';
 
 function dataURItoBlob(dataURI, opts, toFile) {
