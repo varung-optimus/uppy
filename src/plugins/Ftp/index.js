@@ -168,7 +168,7 @@ module.exports = class Ftp extends Plugin {
         }
       }
       this.core.emitter.emit('core:upload-success', fileId)
-    }, 5000, tagFile);
+    }, 2000, tagFile);
   }
 
   logout() {
