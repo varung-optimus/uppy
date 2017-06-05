@@ -7,6 +7,7 @@
   <input type="checkbox" id="opts-Webcam" checked/><label for="opts-Webcam">Webcam</label>
   <input type="checkbox" id="opts-GoogleDrive" checked/><label for="opts-GoogleDrive">Google Drive</label>
   <input type="checkbox" id="opts-Dropbox" checked/><label for="opts-Dropbox">Dropbox</label>
+  <input type="checkbox" id="opts-Ftp" checked/><label for="opts-Ftp">FTP</label>
 </div>
 
 <!-- Modal trigger -->
@@ -24,7 +25,8 @@
     Webcam: document.querySelector('#opts-Webcam'),
     GoogleDrive: document.querySelector('#opts-GoogleDrive'),
     Dropbox: document.querySelector('#opts-Dropbox'),
-    autoProceed: document.querySelector('#opts-autoProceed')
+    autoProceed: document.querySelector('#opts-autoProceed'),
+    Ftp: document.querySelector('#opts-Ftp')
   }
 
   var defaultOpts = {
@@ -32,7 +34,8 @@
     Webcam: true,
     GoogleDrive: true,
     Dropbox: false,
-    autoProceed: false
+    autoProceed: false,
+    Ftp: true
   }
 
   // try to get options from localStorage, if its empty, set to defaultOpts

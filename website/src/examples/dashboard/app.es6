@@ -6,7 +6,7 @@ const Webcam = require('../../../../src/plugins/Webcam')
 const Tus10 = require('../../../../src/plugins/Tus10')
 const MetaData = require('../../../../src/plugins/MetaData')
 const Informer = require('../../../../src/plugins/Informer')
-
+const Ftp = require('../../../../src/plugins/Ftp')
 const UPPY_SERVER = require('../env')
 
 const PROTOCOL = location.protocol === 'https:' ? 'https' : 'http'
@@ -37,6 +37,15 @@ function uppyInit () {
 
   if (opts.Webcam) {
     uppy.use(Webcam, {target: Dashboard})
+  }
+
+  if (opts.Ftp) {
+    uppy.use(Ftp, {
+      target: Dashboard, 
+      host: 'http://192.168.219.226:808/',
+      getFilesUrl: '/share/file?user=204424',
+      bearerToken: 'ZWFydGhsaW5rOmVhcnRobGluaw=='
+    })
   }
 
   uppy.use(Tus10, {endpoint: TUS_ENDPOINT, resume: true})

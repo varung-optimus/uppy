@@ -13579,7 +13579,6 @@ module.exports = function fileItem(props) {
 
   var file = props.file;
   var acquirers = props.acquirers;
-
   var isUploaded = file.progress.uploadComplete;
   var uploadInProgressOrComplete = file.progress.uploadStarted;
   var uploadInProgress = file.progress.uploadStarted && !file.progress.uploadComplete;
@@ -15111,6 +15110,7 @@ module.exports = function (_Plugin) {
     this.view.handleAuth = this.handleAuth.bind(this);
     this.view.getFolder = this.getFolder.bind(this);
     this.view.logout = this.logout.bind(this);
+    this.view.addFile = this.addFile.bind(this);
 
     var target = this.opts.target;
     var plugin = this;
@@ -15173,6 +15173,23 @@ module.exports = function (_Plugin) {
         });
         return;
       }
+
+      for (var _iterator = resp.Data.Files, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+        var _ref;
+
+        if (_isArray) {
+          if (_i >= _iterator.length) break;
+          _ref = _iterator[_i++];
+        } else {
+          _i = _iterator.next();
+          if (_i.done) break;
+          _ref = _i.value;
+        }
+
+        var file = _ref;
+
+        file.acquirer = _this2.id;
+      }
       // Success - display files
       _this2.view.updateState({
         files: resp.Data.Files,
@@ -15180,6 +15197,42 @@ module.exports = function (_Plugin) {
         loading: false
       });
     });
+  };
+
+  Ftp.prototype.addFile = function addFile(file) {
+    var _this3 = this;
+
+    var tagFile = {
+      source: this.id,
+      data: this.getItemData(file),
+      name: this.getItemName(file),
+      type: this.getMimeType(file),
+      isRemote: true,
+      body: {
+        fileId: this.getItemId(file)
+      },
+      remote: {
+        host: this.opts.host,
+        url: '',
+        body: {
+          fileId: this.getItemId(file)
+        }
+      }
+    };
+
+    this.core.emitter.emit('core:file-add', tagFile);
+    setTimeout(function (tagFile) {
+      var fileId = void 0;
+      var files = _this3.core.getState().files;
+      // Find file in this collection and get id
+      // Then invoke upload success automatically
+      for (var fileIndex in files) {
+        if (tagFile.name === files[fileIndex].name) {
+          fileId = fileIndex;
+        }
+      }
+      _this3.core.emitter.emit('core:upload-success', fileId);
+    }, 5000, tagFile);
   };
 
   Ftp.prototype.logout = function logout() {

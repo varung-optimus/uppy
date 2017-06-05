@@ -11,6 +11,7 @@ const FileInput = require('./FileInput')
 const GoogleDrive = require('./GoogleDrive/index.js')
 const Dropbox = require('./Dropbox/index.js')
 const Webcam = require('./Webcam/index.js')
+const Ftp =  require('Ftp/index.js');
 
 // Progressindicators
 const ProgressBar = require('./ProgressBar.js')
@@ -39,5 +40,6 @@ module.exports = {
   Multipart,
   // TransloaditBasic,
   Dashboard,
-  Webcam
+  Webcam,
+  Ftp
 }

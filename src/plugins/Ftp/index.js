@@ -57,9 +57,13 @@ module.exports = class Ftp extends Plugin {
     })
 
     // View overrides
+    // ==============
+    // These are needed as the generic provider methods written
+    // differ the ones needed for this plugin
     this.view.handleAuth = this.handleAuth.bind(this)
     this.view.getFolder = this.getFolder.bind(this)
     this.view.logout = this.logout.bind(this)
+    this.view.addFile = this.addFile.bind(this)
 
     const target = this.opts.target
     const plugin = this
@@ -120,6 +124,10 @@ module.exports = class Ftp extends Plugin {
          })
          return
        }
+
+       for (let file of resp.Data.Files) {
+        file.acquirer = this.id;
+       }
        // Success - display files
       this.view.updateState({
           files: resp.Data.Files,
@@ -127,6 +135,40 @@ module.exports = class Ftp extends Plugin {
           loading: false
       }) 
     })
+  }
+
+  addFile (file) {
+    const tagFile = {
+      source: this.id,
+      data: this.getItemData(file),
+      name: this.getItemName(file),
+      type: this.getMimeType(file),
+      isRemote: true,
+      body: {
+        fileId: this.getItemId(file)
+      },
+      remote: {
+        host: this.opts.host,
+        url: '',
+        body: {
+          fileId: this.getItemId(file)
+        }
+      }
+    }
+
+    this.core.emitter.emit('core:file-add', tagFile)
+    setTimeout((tagFile) => {
+      let fileId;
+      let files = this.core.getState().files;
+      // Find file in this collection and get id
+      // Then invoke upload success automatically
+      for (let fileIndex in files) {
+        if (tagFile.name === files[fileIndex].name) {
+          fileId = fileIndex;
+        }
+      }
+      this.core.emitter.emit('core:upload-success', fileId)
+    }, 5000, tagFile);
   }
 
   logout() {

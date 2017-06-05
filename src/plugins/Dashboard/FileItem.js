@@ -13,7 +13,6 @@ const { iconEdit, iconCopy } = require('./icons')
 module.exports = function fileItem (props) {
   const file = props.file
   const acquirers = props.acquirers
-
   const isUploaded = file.progress.uploadComplete
   const uploadInProgressOrComplete = file.progress.uploadStarted
   const uploadInProgress = file.progress.uploadStarted && !file.progress.uploadComplete
